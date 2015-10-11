@@ -1,5 +1,22 @@
-window.onload = function () {
-	prepareGallery();
+function addLoadEvent(func) {
+	var oldonload = window.onload;
+	if (typeof window.onload != 'function') {
+		window.onload = func;
+	} else {
+		window.onload = function() {
+			oldonload();
+			func();
+		}
+	}
+}
+
+function insertAfter(newElement,targetElement) {
+	var parent = targetElement.parentNode;
+	if (parent.lastChild == targetElement) {
+		parent.appendChild(newElement);
+	} else {
+		parent.insertBefore(newElement,targetElement.nextSibling);
+	}
 }
 
 function showPic(whichPic) {
@@ -13,7 +30,6 @@ function showPic(whichPic) {
 		var desc = document.getElementById('description');
 		desc.firstChild.nodeValue = text;
 	}
-
 	return true;
 }
 
@@ -30,30 +46,23 @@ function prepareGallery() {
 	}
 }
 
+function preparePlaceholder() {
+	if (!document.createElement) return false;
+	if (!document.createTextNode) return false;
+	if (!document.getElementById('imagegallery')) return false;
+	var placeholder = document.createElement('img');
+	placeholder.setAttribute('id','placeholder');
+	placeholder.setAttribute('src','images/placeholder.gif');
+	placeholder.setAttribute('alt','my image gallery');
+	var description = document.createElement('p');
+	description.setAttribute('id','description');
+	var txt = document.createTextNode('Choose a image');
+	description.appendChild(txt);
+	var gallery = document.getElementById('imagegallery');
+	insertAfter(placeholder,gallery);
+	insertAfter(description,placeholder);
+}
 
+addLoadEvent(prepareGallery);
+addLoadEvent(preparePlaceholder);
 
-
-// window.onload = prepareLinks;
-// function prepareLinks() {
-// 	// var links = document.getElementsByTagName('a');
-// 	// for (var i = 0; i < links.length; i++) {
-// 	// 	if (links[i].getAttribute('class') == 'popup') {
-// 	// 		links[i].onclick = function() {
-// 	// 			popUp(this.getAttribute('href'));
-// 	// 			return false;
-// 	// 		}
-// 	// 	}
-// 	// }
-// 	if (!document.getElementsByClassName || !document.getElementsByTagName) return false;
-// 	var links = document.getElementsByClassName('popup')
-// 	for (var i = 0; i < links.length; i++) {
-// 		links[i].onclick = function() {
-// 			popUp(this.href);
-// 			return false;
-// 		}
-// 	};
-// }
-
-// function popUp(winURL) {
-// 	window.open(winURL,'popUp','width=320,height=480');
-// }

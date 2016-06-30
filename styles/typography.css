@@ -24,7 +24,7 @@ article p {
 }
 h1 {
 	font-family: "Georgia","Times New Roman",sans-serif;
-	font: 2.4em normal;
+	font: 2.4em normal;	
 }
 h2 {
 	font-family: "Georgia","Times New Roman",sans-serif;
@@ -42,5 +42,3 @@ h3 {
 textarea {
 	font-family: "Helvetica","Arial",sans-serif;
 }
-
-

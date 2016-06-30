@@ -2,7 +2,6 @@ body {
 	color: #fb5;
 	background-color: #334;
 }
-
 a:link {
 	color: #445;
 	background-color: #eb6;
@@ -19,7 +18,6 @@ a:active {
 	color: #778;
 	background-color: #ec8;
 }
-
 header {
 	color: #ec8;
 	background-color: #334;
@@ -46,7 +44,6 @@ header nav a:active {
 	color: #667;
 	background-color: #ec8;
 }
-
 article {
 	color: #223;
 	background-color: #edc;
@@ -59,7 +56,3 @@ article img {
 #imagegallery a {
 	background-color: transparent;
 }
-
-
-
-

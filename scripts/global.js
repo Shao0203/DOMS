@@ -10,9 +10,9 @@ function addLoadEvent(func) {
 	}
 }
 
-function insertAfter(newElement,targetElement) {
+function insertAfter(newElement,targetElement){
 	var parent = targetElement.parentNode;
-	if (parent.lastChild == targetElement) {
+	if (targetElement == parent.lastChild) {
 		parent.appendChild(newElement);
 	} else {
 		parent.insertBefore(newElement,targetElement.nextSibling);
@@ -21,11 +21,21 @@ function insertAfter(newElement,targetElement) {
 
 function addClass(element,value) {
 	if (!element.className) {
-		element.className = value;
+		element.classNme = value;
 	} else {
-		var newClassName = element.className;
-		newClassName += ' ';
-		newClassName += value;
+		newClassName = element.className;
+		newClassName+= ' ';
+		newClassName+= value;
 		element.className = newClassName;
 	}
 }
+
+
+
+
+
+
+
+
+
+

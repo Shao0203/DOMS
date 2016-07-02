@@ -98,8 +98,8 @@ function prepareSlideshow() {
 	frame.setAttribute('id','frame');
 	slideshow.appendChild(frame);
 
-	// var links = intro.getElementsByTagName('a');
-	var links = document.getElementsByTagName('a');
+	// var links = intro.getElementsByTagName('a'); //only the a tag under p tag
+	var links = document.getElementsByTagName('a');	//all the <a>, nav and p
 	var destination;
 	for (var i = 0; i < links.length; i++) {
 		links[i].onmouseover = function() {
@@ -122,13 +122,66 @@ function prepareSlideshow() {
 		}
 	}
 }
+// 01/07/16 ends here
+
+function showSection(navid) {
+	var sections = document.getElementsByTagName('section');
+	for (var i = 0; i < sections.length; i++) {
+		var secid = sections[i].getAttribute('id');
+		if (secid != navid) {
+			sections[i].style.display = 'none';
+		} else {
+			sections[i].style.display = 'block';
+		}
+	}
+}
+
+function prepareInternalnav() {
+	var articles = document.getElementsByTagName('article');
+	var navs = articles[0].getElementsByTagName('nav');
+	var links = navs[0].getElementsByTagName('a');
+	for (var i = 0; i < links.length; i++) {
+		var navid = links[i].getAttribute('href').split('#')[1];
+		if (!document.getElementById(navid)) continue;
+		document.getElementById(navid).style.display = 'none';
+		links[i].destination = navid;
+		links[i].onclick = function() {
+			showSection(this.destination);
+			return false;
+		}
+	}
+}
 
 addLoadEvent(highlightPage);
 addLoadEvent(prepareSlideshow);
+addLoadEvent(prepareInternalnav);
 
 
 
 
+/*	testing function
+function showSec() {
+	var articles = document.getElementsByTagName('article');
+	var navs = articles[0].getElementsByTagName('nav');
+	var links = navs[0].getElementsByTagName('a');
+	var sections = document.getElementsByTagName('section');
+	for (var i = 0; i < sections.length; i++) {
+		sections[i].style.display = 'none';
+		var secid = sections[i].id;
+		
+		for (var i = 0; i < links.length; i++) {
+			var navid = links[i].getAttribute('href').split('#')[1];
+			links[i].onclick = function() {
+				if (navid == secid) {
+					sections[i].style.display = 'block';
+				}
+			}
+		}
+	}
+}
+
+addLoadEvent(showSec);
+*/
 
 
 

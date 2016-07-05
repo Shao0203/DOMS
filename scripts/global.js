@@ -1,34 +1,34 @@
-// function addLoadEvent(func) {
-// 	var oldonload = window.onload;
-// 	if (typeof window.onload != 'function') {
-// 		window.onload = func;
-// 	} else {
-// 		window.onload = function() {
-// 			oldonload();
-// 			func();
-// 		}
-// 	}
-// }
+function addLoadEvent(func) {
+	var oldonload = window.onload;
+	if (typeof window.onload != 'function') {
+		window.onload = func;
+	} else {
+		window.onload = function() {
+			oldonload();
+			func();
+		}
+	}
+}
 
-// function insertAfter(newElement,targetElement){
-// 	var parent = targetElement.parentNode;
-// 	if (targetElement == parent.lastChild) {
-// 		parent.appendChild(newElement);
-// 	} else {
-// 		parent.insertBefore(newElement,targetElement.nextSibling);
-// 	}
-// }
+function insertAfter(newElement,targetElement){
+	var parent = targetElement.parentNode;
+	if (targetElement == parent.lastChild) {
+		parent.appendChild(newElement);
+	} else {
+		parent.insertBefore(newElement,targetElement.nextSibling);
+	}
+}
 
-// function addClass(element,value) {
-// 	if (!element.className) {
-// 		element.classNme = value;
-// 	} else {
-// 		newClassName = element.className;
-// 		newClassName+= ' ';
-// 		newClassName+= value;
-// 		element.className = newClassName;
-// 	}
-// }
+function addClass(element,value) {
+	if (!element.className) {
+		element.classNme = value;
+	} else {
+		newClassName = element.className;
+		newClassName+= ' ';
+		newClassName+= value;
+		element.className = newClassName;
+	}
+}
 
 function highlightPage() {
 	if (!document.getElementById) return false;
@@ -122,7 +122,6 @@ function prepareSlideshow() {
 		}
 	}
 }
-// 01/07/16 ends here
 
 function showSection(navid) {
 	var sections = document.getElementsByTagName('section');
@@ -138,7 +137,9 @@ function showSection(navid) {
 
 function prepareInternalnav() {
 	var articles = document.getElementsByTagName('article');
+	if (articles.length == 0) return false;
 	var navs = articles[0].getElementsByTagName('nav');
+	if (navs.length == 0) return false;
 	var links = navs[0].getElementsByTagName('a');
 	for (var i = 0; i < links.length; i++) {
 		var navid = links[i].getAttribute('href').split('#')[1];
@@ -152,9 +153,55 @@ function prepareInternalnav() {
 	}
 }
 
+function preparePlaceholder() {
+	if (!document.getElementById('imagegallery')) return false;
+	var placeholder = document.createElement('img');
+	placeholder.setAttribute('id','placeholder');
+	placeholder.setAttribute('src','images/placeholder.gif');
+	placeholder.setAttribute('alt','my image gallery');
+	var description = document.createElement('p');
+	description.setAttribute('id','description');
+	var desctext = document.createTextNode('Choose an image');
+	description.appendChild(desctext);
+	var gallery = document.getElementById('imagegallery');
+	insertAfter(description,gallery);
+	insertAfter(placeholder,description);
+}
+
+function showPic(whichpic) {
+	if (!document.getElementById('placeholder')) return false;
+	var source = whichpic.getAttribute('href');
+	var placeholder = document.getElementById('placeholder');
+	placeholder.setAttribute('src',source);
+	if (!document.getElementById('description')) return false;
+	if (whichpic.title) {
+		var text = whichpic.title;
+	} else {
+		var text = '';
+	}
+	var description = document.getElementById('description');
+	if (description.lastChild.nodeType == 3) {
+		description.lastChild.nodeValue = text;
+	}
+	return false;
+}
+
+function gallery() {
+	if (!document.getElementById('imagegallery')) return false;
+	var gallery = document.getElementById('imagegallery');
+	var links = gallery.getElementsByTagName('a');
+	for (var i = 0; i < links.length; i++) {
+		links[i].onclick = function() {
+			return showPic(this);
+		}
+	}
+}
+
 addLoadEvent(highlightPage);
 addLoadEvent(prepareSlideshow);
 addLoadEvent(prepareInternalnav);
+addLoadEvent(preparePlaceholder);
+addLoadEvent(gallery);
 
 
 

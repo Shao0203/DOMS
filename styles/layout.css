@@ -82,4 +82,6 @@ article img {
 	z-index: 99;
 	border-width: 0;
 }
-
+#imagegallery li {
+	display: inline;
+}

@@ -21,7 +21,7 @@ function insertAfter(newElement,targetElement){
 
 function addClass(element,value) {
 	if (!element.className) {
-		element.classNme = value;
+		element.className = value;
 	} else {
 		newClassName = element.className;
 		newClassName+= ' ';
@@ -197,12 +197,48 @@ function gallery() {
 	}
 }
 
+function stripeTables() {
+	if (!document.getElementsByTagName('table')) return false;
+	var tables = document.getElementsByTagName('table');
+	for (var i = 0; i < tables.length; i++) {
+		var odd = false;
+		var rows = tables[i].getElementsByTagName('tr');
+		for (var j = 0; j < rows.length; j++) {
+			if (odd == true) {
+				addClass(rows[j],'odd');
+				odd = false;
+			} else {
+				odd = true;
+			}
+		}
+	}
+}
+
+function highlightRows() {
+	if (!document.getElementsByTagName('table')) return false;
+	var tables = document.getElementsByTagName('table');
+	for (var i = 0; i < tables.length; i++) {
+		var rows = tables[i].getElementsByTagName('tr');
+		for (var j = 0; j < rows.length; j++) {
+			rows[j].oldClassName = rows[j].className;
+			rows[j].onmouseover = function() {
+				addClass(this,'highlight');
+			}
+			rows[j].onmouseout = function() {
+				this.className = this.oldClassName;
+			}
+		}
+	}
+}
+
+
 addLoadEvent(highlightPage);
 addLoadEvent(prepareSlideshow);
 addLoadEvent(prepareInternalnav);
 addLoadEvent(preparePlaceholder);
 addLoadEvent(gallery);
-
+addLoadEvent(stripeTables);
+addLoadEvent(highlightRows);
 
 
 

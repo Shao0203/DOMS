@@ -191,7 +191,7 @@ function gallery() {
 	var gallery = document.getElementById('imagegallery');
 	var links = gallery.getElementsByTagName('a');
 	for (var i = 0; i < links.length; i++) {
-		links[i].onclick = function() {
+		links[i].onmouseover = function() {
 			return showPic(this);
 		}
 	}
@@ -264,6 +264,68 @@ function displayAbbr() {
 	articles[0].appendChild(dlist);
 }
 
+function focusLabels() {
+	if (!document.getElementsByTagName('label')) return false;
+	var labels = document.getElementsByTagName('label');
+	for (var i = 0; i < labels.length; i++) {
+		if (!labels[i].getAttribute('for')) continue;
+		labels[i].onclick = function() {
+			var id = this.getAttribute('for');
+			if (!document.getElementById(id)) return false;
+			document.getElementById(id).focus();
+		}
+	}
+}
+
+function checkFields() {
+	var fm = document.forms[0];
+	fm.onsubmit = function() {
+		for (var i = 0; i < this.elements.length; i++) {
+			var elem = this.elements[i];
+			if (elem.required == 'required') {
+				alert('Please fill in the ' + elem.name + ' field.');
+				return false;
+			}
+			if (elem.type == 'email' && elem.value.indexOf('@') == -1) {
+				alert('The ' +elem.name+ ' field must be a valid email address.');
+				return false;
+			}
+		}
+	return true;
+	}
+}
+
+function displayAjaxLoading(element) {
+	while (element.hasChildNodes()) {
+		element.removeChild(element.lastChild);
+	}
+	var content = document.createElement('img');
+	content.setAttribute('src','images/loading.gif');
+	content.setAttribute('alt','Loading...');
+	element.appendChild(content);
+}
+
+function submitFormWithAjax(whichform, thetarget) {
+	var fm = document.forms[0];
+	var request = new XMLHttpRequest();
+	if (!request) return false;
+	displayAjaxLoading(thetarget);
+	var dataParts = [];
+	var element;
+	for (var i = 0; i < whichform.elements.length; i++) {
+		element = whichform.elements[i];
+		dataParts[i] = element.name + '=' +encodeURIComponent(element.value);
+	}
+	var data = dataParts.join('&');
+	request.open('POST', whichform.getAttribute('action'), true);
+	request.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+	
+}
+
+
+
+
+
 addLoadEvent(highlightPage);
 addLoadEvent(prepareSlideshow);
 addLoadEvent(prepareInternalnav);
@@ -272,7 +334,8 @@ addLoadEvent(gallery);
 addLoadEvent(stripeTables);
 addLoadEvent(highlightRows);
 addLoadEvent(displayAbbr);
-
+addLoadEvent(focusLabels);
+addLoadEvent(checkFields);
 
 
 /*	testing function

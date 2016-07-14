@@ -305,8 +305,39 @@ function displayAjaxLoading(element) {
 	element.appendChild(content);
 }
 
+// function submitFormWithAjax() {
+// 	var fm = document.forms[0];
+// 	fm.onsubmit = function() {
+// 		var article = document.getElementsByTagName('article')[0];
+// 		var request = new XMLHttpRequest();
+// 		if (!request) return false;
+// 		// displayAjaxLoading(article);
+// 		var dataParts = [];
+// 		var element;
+// 		for (var i = 0; i < this.elements.length; i++) {
+// 			element = this.elements[i];
+// 			dataParts[i] = element.name + '=' +encodeURIComponent(element.value);
+// 		}
+// 		var data = dataParts.join('&');
+// 		request.open('POST', this.getAttribute('action'), true);
+// 		request.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+// 		request.onreadystatechange = function() {
+// 			if (request.status == 4) {
+// 				var matches = request.responseText.match(/<article>([\s\S]+)<\/article>/);
+// 				if (matches.length > 0) {
+// 					article.innerHTML = matches[1];
+// 				} else {
+// 					article.innerHTML = '<p>Oops, there was an error.</p>'
+// 				}
+// 			}
+// 		}
+// 		request.send(null);
+// 		return false;
+// 	}
+// }
+
+
 function submitFormWithAjax(whichform, thetarget) {
-	var fm = document.forms[0];
 	var request = new XMLHttpRequest();
 	if (!request) return false;
 	displayAjaxLoading(thetarget);
@@ -314,14 +345,39 @@ function submitFormWithAjax(whichform, thetarget) {
 	var element;
 	for (var i = 0; i < whichform.elements.length; i++) {
 		element = whichform.elements[i];
-		dataParts[i] = element.name + '=' +encodeURIComponent(element.value);
+		dataParts[i] = element.name + '=' + encodeURIComponent(element.value);
 	}
 	var data = dataParts.join('&');
 	request.open('POST', whichform.getAttribute('action'), true);
 	request.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-	
+	request.onreadystatechange = function() {
+		if (request.status == 4) {
+			if (request.status == 200 || request.status == 0) {
+				var matches = request.responseText.match(/<article>([\s\S]+)<\/article>/)[1];
+				if (matches.length > 0) {
+					thetarget.innerHTML = matches[1];
+				} else {
+					thetarget.innerHTML = '<p>Sorry, there was an error.</p>';
+				}
+			} else {
+				thetarget.innerHTML = '<p>' + request.statusText + '</p>';
+			}
+		}
+	}
+	request.send(data);
+	return true;
 }
 
+function subForms() {
+	for (var i = 0; i < document.forms.length; i++) {
+		var thisform = document.forms[i];
+		thisform.onsubmit = function() {
+			var article = document.getElementsByTagName('article')[0];
+			if (submitFormWithAjax(this, article)) return false;
+			return true;
+		}
+	}
+}
 
 
 
@@ -336,7 +392,7 @@ addLoadEvent(highlightRows);
 addLoadEvent(displayAbbr);
 addLoadEvent(focusLabels);
 addLoadEvent(checkFields);
-
+addLoadEvent(subForms);
 
 /*	testing function
 function showSec() {
